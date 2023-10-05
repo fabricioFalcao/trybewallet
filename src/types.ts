@@ -1,16 +1,19 @@
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 export type UserType = {
   email: string,
   password: string
 };
 
 export type ExpensesType = {
-  id: string;
   value: string;
+  description: string;
   currency: string;
   method: string;
   tag: string;
-  description: string;
-  exchangeRates: string;
+  id: number | undefined;
+  exchangeRates: object
 };
 
 export type WalletType = {
@@ -18,9 +21,13 @@ export type WalletType = {
   expenses: ExpensesType[],
   editor: boolean,
   idToEdit: number,
+  isFetchig: boolean,
+  errorMessage: string,
 };
 
 export type GlobalStateType = {
   user: UserType,
   wallet: WalletType,
 };
+
+export type Dispatch = ThunkDispatch<GlobalStateType, null, AnyAction>;
