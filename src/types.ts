@@ -7,12 +7,12 @@ export type UserType = {
 };
 
 export type ExpensesType = {
+  id: number | undefined;
   value: string;
-  description: string;
   currency: string;
   method: string;
   tag: string;
-  id: number | undefined;
+  description: string;
   exchangeRates: object
 };
 

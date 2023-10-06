@@ -16,7 +16,7 @@ function WalletForm() {
   const [expense, setExpense] = useState(INITIAL_STATE);
   const { currency, description, method, tag, value } = expense;
 
-  const { wallet: { expenses } } = useSelector((state: GlobalStateType) => state);
+  // const { wallet: { expenses } } = useSelector((state: GlobalStateType) => state);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -46,12 +46,19 @@ function WalletForm() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const idGenerator = expenses.length > 0 ? expenses[expenses.length - 1].id + 1 : 0;
+    const idStored: number = JSON.parse(localStorage.getItem('idGenerator')!);
+    if (idStored === null) {
+      const idGenerator = 0;
+      localStorage.setItem('idGenerator', JSON.stringify(idGenerator));
+    } else {
+      const idGenerator = idStored + 1;
+      localStorage.setItem('idGenerator', JSON.stringify(idGenerator));
+    }
 
     const rates = await fetchRates();
 
     const newExpense = {
-      id: idGenerator,
+      id: JSON.parse(localStorage.getItem('idGenerator')!),
       ...expense,
       exchangeRates: rates,
     };
