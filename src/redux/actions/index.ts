@@ -1,9 +1,9 @@
-import { Dispatch, ExpensesType, UserType, WalletType } from '../../types';
+import { Dispatch, ExpensesType, UserType } from '../../types';
 
 // Coloque aqui suas actions
 export const USER_DATA = 'USER_DATA';
-export const WALLET_DATA = 'WALLET_DATA';
 export const SUBMIT_EXPENSE = 'SUBMIT_EXPENSE';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 export const REQUEST_STARTED = 'REQUEST_STARTED';
 export const REQUEST_SUCCEEDED = 'REQUEST_SUCCEEDED';
 export const REQUEST_FAILED = 'REQUEST_FAILED';
@@ -13,14 +13,14 @@ export const submitUserData = (userData: UserType) => ({
   payload: userData,
 });
 
-export const submitWalletData = (walletData: WalletType) => ({
-  type: WALLET_DATA,
-  payload: walletData,
-});
-
 export const submitExpense = (expenseData: ExpensesType) => ({
   type: SUBMIT_EXPENSE,
   payload: expenseData,
+});
+
+export const deleteExpense = (id: number) => ({
+  type: DELETE_EXPENSE,
+  payload: id,
 });
 
 // Fetch actions

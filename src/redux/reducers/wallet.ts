@@ -3,6 +3,7 @@
 import { AnyAction } from 'redux';
 import { WalletType } from '../../types';
 import {
+  DELETE_EXPENSE,
   REQUEST_FAILED,
   REQUEST_STARTED,
   REQUEST_SUCCEEDED,
@@ -49,6 +50,13 @@ const walletReducer = (state: WalletType = INITIAL_STATE, action: AnyAction) => 
         ...state,
         expenses: [...state.expenses, action.payload],
       };
+
+    case DELETE_EXPENSE:
+      return {
+        ...state,
+        expenses: state.expenses.filter((expense) => expense.id !== action.payload),
+      };
+
     default:
       return state;
   }
