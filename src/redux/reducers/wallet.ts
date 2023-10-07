@@ -4,6 +4,8 @@ import { AnyAction } from 'redux';
 import { WalletType } from '../../types';
 import {
   DELETE_EXPENSE,
+  EDIT_EXPENSE,
+  ENABLE_EDITOR,
   REQUEST_FAILED,
   REQUEST_STARTED,
   REQUEST_SUCCEEDED,
@@ -19,6 +21,20 @@ const INITIAL_STATE = {
   errorMessage: '',
 };
 
+const editedExpenses = (state: WalletType, action: AnyAction) => {
+  return {
+    ...state,
+    expenses: state.expenses.map((expense) => {
+      if (expense.id === state.idToEdit) {
+        return { ...expense, ...action.payload };
+      }
+      return expense;
+    }),
+    editor: false,
+    idToEdit: 0,
+  };
+};
+
 const walletReducer = (state: WalletType = INITIAL_STATE, action: AnyAction) => {
   switch (action.type) {
     case REQUEST_STARTED:
@@ -28,7 +44,6 @@ const walletReducer = (state: WalletType = INITIAL_STATE, action: AnyAction) => 
         errorMessage: '',
         currencies: [],
       };
-
     case REQUEST_SUCCEEDED:
       return {
         ...state,
@@ -36,7 +51,6 @@ const walletReducer = (state: WalletType = INITIAL_STATE, action: AnyAction) => 
         currencies: action.payload,
         errorMessage: '',
       };
-
     case REQUEST_FAILED:
       return {
         ...state,
@@ -44,18 +58,24 @@ const walletReducer = (state: WalletType = INITIAL_STATE, action: AnyAction) => 
         errorMessage: action.payload,
         currencies: [],
       };
-
     case SUBMIT_EXPENSE:
       return {
         ...state,
         expenses: [...state.expenses, action.payload],
       };
-
     case DELETE_EXPENSE:
       return {
         ...state,
         expenses: state.expenses.filter((expense) => expense.id !== action.payload),
       };
+    case ENABLE_EDITOR:
+      return {
+        ...state,
+        editor: true,
+        idToEdit: action.payload,
+      };
+    case EDIT_EXPENSE:
+      return editedExpenses(state, action);
 
     default:
       return state;

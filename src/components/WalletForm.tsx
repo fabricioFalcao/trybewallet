@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Dispatch, GlobalStateType } from '../types';
-import { fetchCurrencies, submitExpense } from '../redux/actions';
+import { editExpense, fetchCurrencies, submitExpense } from '../redux/actions';
+import fetchRates from '../utils/fetchRates';
 
 const INITIAL_STATE = {
   value: '',
@@ -13,10 +14,37 @@ const INITIAL_STATE = {
 };
 
 function WalletForm() {
+  const {
+    wallet: {
+      currencies,
+      editor,
+      expenses,
+      idToEdit,
+    },
+  } = useSelector((state: GlobalStateType) => state);
+
+  const dispatch:Dispatch = useDispatch();
+
   const [expense, setExpense] = useState(INITIAL_STATE);
   const { currency, description, method, tag, value } = expense;
 
-  // const { wallet: { expenses } } = useSelector((state: GlobalStateType) => state);
+  useEffect(() => {
+    if (editor) {
+      const editingExpense = expenses.find(({ id }) => id === idToEdit)!;
+      setExpense({
+        value: editingExpense.value,
+        currency: editingExpense.currency,
+        method: editingExpense.method,
+        tag: editingExpense.tag,
+        description: editingExpense.description,
+      });
+    }
+
+    async function getCurrencies() {
+      dispatch(fetchCurrencies());
+    }
+    getCurrencies();
+  }, [dispatch, editor, expenses, idToEdit]);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -28,24 +56,7 @@ function WalletForm() {
     });
   };
 
-  const dispatch:Dispatch = useDispatch();
-
-  useEffect(() => {
-    async function getCurrencies() {
-      dispatch(fetchCurrencies());
-    }
-    getCurrencies();
-  }, [dispatch]);
-
-  const fetchRates = async () => {
-    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-    const data = await response.json();
-    return data;
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const submitNewExpense = async () => {
     const idStored: number = JSON.parse(localStorage.getItem('idGenerator')!);
     if (idStored === null) {
       const idGenerator = 0;
@@ -64,11 +75,19 @@ function WalletForm() {
     };
 
     dispatch(submitExpense(newExpense));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (editor) {
+      dispatch(editExpense(expense));
+    } else {
+      submitNewExpense();
+    }
 
     setExpense(INITIAL_STATE);
   };
-
-  const { currencies } = useSelector((state: GlobalStateType) => state.wallet);
 
   return (
     <form
@@ -136,7 +155,7 @@ function WalletForm() {
         <option value="Saúde">Saúde</option>
       </select>
 
-      <button type="submit">Adicionar despesa</button>
+      <button type="submit">{editor ? 'Editar despesa' : 'Adicionar despesa'}</button>
 
     </form>
   );

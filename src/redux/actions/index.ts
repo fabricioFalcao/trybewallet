@@ -7,6 +7,8 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 export const REQUEST_STARTED = 'REQUEST_STARTED';
 export const REQUEST_SUCCEEDED = 'REQUEST_SUCCEEDED';
 export const REQUEST_FAILED = 'REQUEST_FAILED';
+export const ENABLE_EDITOR = 'ENABLE_EDITOR';
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
 
 export const submitUserData = (userData: UserType) => ({
   type: USER_DATA,
@@ -21,6 +23,16 @@ export const submitExpense = (expenseData: ExpensesType) => ({
 export const deleteExpense = (id: number) => ({
   type: DELETE_EXPENSE,
   payload: id,
+});
+
+export const enableEditor = (id: number) => ({
+  type: ENABLE_EDITOR,
+  payload: id,
+});
+
+export const editExpense = (expenseData: Omit<ExpensesType, 'id' | 'exchangeRates'>) => ({
+  type: EDIT_EXPENSE,
+  payload: expenseData,
 });
 
 // Fetch actions

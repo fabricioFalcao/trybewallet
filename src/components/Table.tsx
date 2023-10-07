@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { GlobalStateType } from '../types';
-import { deleteExpense } from '../redux/actions';
+import { deleteExpense, enableEditor } from '../redux/actions';
 
 const tableHeader = [
   'Descrição',
@@ -39,7 +39,13 @@ function Table() {
             <td>{(Number(value) * Number(exchangeRates[currency].ask)).toFixed(2)}</td>
             <td>Real</td>
             <td>
-              <button>Editar</button>
+              <button
+                data-testid="edit-btn"
+                onClick={ () => dispatch(enableEditor(id)) }
+              >
+                Editar
+
+              </button>
               <button
                 data-testid="delete-btn"
                 onClick={ () => dispatch(deleteExpense(id)) }
