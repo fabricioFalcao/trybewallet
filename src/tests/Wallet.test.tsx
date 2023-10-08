@@ -6,6 +6,8 @@ import { renderWithRouterAndRedux } from './helpers/renderWith';
 import App from '../App';
 import { initialState } from './helpers/initialState';
 
+const currencyId = 'currency-input';
+
 describe('Wallet page tests', () => {
   beforeEach(() => {
     const MOCK_RESPONSE = { json: async () => mockData } as Response;
@@ -22,7 +24,7 @@ describe('Wallet page tests', () => {
     screen.getByTestId('total-field');
     screen.getByTestId('value-input');
     screen.getByTestId('description-input');
-    screen.getByTestId('currency-input');
+    screen.getByTestId(currencyId);
     screen.getByTestId('method-input');
     screen.getByTestId('tag-input');
     screen.getByRole('button', { name: /adicionar despesa/i });
@@ -41,7 +43,7 @@ describe('Wallet page tests', () => {
 
     const valueInput = screen.getByTestId('value-input');
     const descriptionInput = screen.getByTestId('description-input');
-    const currencyInput = await screen.findByTestId('currency-input');
+    const currencyInput = await screen.findByTestId(currencyId);
     const methodInput = screen.getByTestId('method-input');
     const tagInput = screen.getByTestId('tag-input');
 
@@ -80,7 +82,7 @@ describe('Wallet page tests', () => {
     const tag = 'Lazer';
 
     const submitButton = screen.getByTestId('submit-button');
-    const currencyInput = await screen.findByTestId('currency-input');
+    const currencyInput = await screen.findByTestId(currencyId);
     const tagInput = screen.getByTestId('tag-input');
 
     const editButton = screen.getByTestId('edit-btn');
