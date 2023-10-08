@@ -155,7 +155,13 @@ function WalletForm() {
         <option value="Saúde">Saúde</option>
       </select>
 
-      <button type="submit">{editor ? 'Editar despesa' : 'Adicionar despesa'}</button>
+      <button
+        type="submit"
+        data-testid="submit-button"
+      >
+        {editor ? 'Editar despesa' : 'Adicionar despesa'}
+
+      </button>
 
     </form>
   );
